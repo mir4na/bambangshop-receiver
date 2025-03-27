@@ -86,4 +86,8 @@ This is the place for you to write reflections:
 
 #### Reflection Subscriber-1
 
+1. RwLock lebih dipilih daripada Mutex karena RwLock memungkinkan banyak thread membaca data secara bersamaan (read-only access), tetapi hanya satu thread yang bisa menulis (write access). Pada kasus ini, operasi list_all_as_string() hanya membaca data (NOTIFICATIONS.read()) sehingga beberapa thread bisa mengaksesnya secara paralel tanpa blocking. Sementara Mutex hanya mengizinkan satu thread mengakses data sehingga akan mengurangi performa jika ada banyak pembacaan.
+
+2. Menurut saya, Rust tidak mengizinkan mutasi langsung pada static variable karena aturan thread safety dan memory safety. Static variable bersifat global dan bisa diakses oleh semua thread sehingga mutasi langsung berisiko menyebabkan race condition. Library lazy_static menyediakan cara aman untuk inisialisasi lazy (hanya dibuat saat pertama kali diakses) dan mengatur akses concurrency melalui wrapper seperti RwLock atau Mutex. Ini berbeda dengan Java yang mengandalkan synchronized atau volatile untuk thread safety. Rust memaksa developer memikirkan concurrency sejak awal melalui sistem ownership dan tipe seperti RwLock.
+
 #### Reflection Subscriber-2
